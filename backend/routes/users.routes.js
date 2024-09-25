@@ -4,6 +4,7 @@ const { UserModel } = require("../models/users.models");
 const jwt = require("jsonwebtoken");
 const { auth } = require("../middlewares/users.middleware");
 const { BlackListModel } = require("../models/blacklist");
+const { TeacherRequestModel } = require("../models/teacherRequest.models");
 
 const userRouter = express.Router();
 
@@ -34,12 +35,12 @@ userRouter.get("/", auth, async (req, res) => {
 //       const { page, limit } = req.query;
 //       const pageNumber = parseInt(page, 10) || 1; // Convert to integer with a default value of 1
 //       const limitNumber = parseInt(limit, 10) || 10; // Convert to integer with a default value of 10
-      
+
 //       // Use pageNumber and limitNumber in your database query or pagination logic
 //       const users = await UserModel.find()
 //         .skip((pageNumber - 1) * limitNumber)
 //         .limit(limitNumber);
-      
+
 //       res.status(200).json({ users });
 //     } else {
 //       res.status(401).json({ error: "You don't have access to users" });
@@ -255,45 +256,105 @@ userRouter.post("/addCourse/:courseId", auth, async (req, res) => {
 
 });
 
-userRouter.post('/requests/become-teacher', async (req, res) => {
-  const { userId } = req.body;
 
+
+//demande de l'enseignement
+userRouter.post('/teach/request', async (req, res) => {
   try {
-    // Enregistrer la demande dans la base de données avec un statut "en attente"
-    const request = await TeacherRequest.create({ userId, status: 'pending' });
-    
-    res.status(200).json({ message: 'Demande envoyée avec succès', request });
-  } catch (error) {
-    res.status(500).json({ message: 'Erreur lors de l\'envoi de la demande' });
-  }
-});
+    const { userId } = req.body;
 
+    // Vérifiez si une demande en attente existe déjà pour cet utilisateur
+    const existingRequest = await TeacherRequestModel.findOne({
+      userId,
+      status: 'pending',
+    });
 
-
-
-userRouter.get("/Teachme/:userId", async (req, res) => {
-  try {
-    const userId = req.params.userId;
-
-    // Find the user by ID
-    const user = await UserModel.findById(userId);
-
-    // Check if the user exists
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    if (existingRequest) {
+      return res.status(400).json({ message: 'Une demande en attente existe déjà pour cet utilisateur.' });
     }
 
-    // Update the user's role to "teacher"
-    user.role = "teacher";
-    await user.save();
+    const newRequest = new TeacherRequestModel({
+      userId,
+      status: 'pending',
+    });
 
-    // Return success message
-    res.status(200).json({ message: "User role updated to teacher" });
-  } catch (err) {
-    // Handle errors
-    res.status(400).json({ message: "Something went wrong", error: err.message });
+    await newRequest.save();
+    res.status(201).json({ message: 'Demande envoyée avec succès', request: newRequest });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Erreur lors de l\'envoi de la demande', error });
   }
 });
+
+
+// lister les requettes
+userRouter.get('/admin/requests', async (req, res) => {
+  try {
+    const requests = await TeacherRequestModel.find({
+      status: 'pending'
+    }).populate('userId');
+    res.status(200).json(requests);
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur lors de la récupération des demandes' });
+  }
+});
+
+
+// accepter ou refuser
+
+userRouter.put('/admin/requests/:id', async (req, res) => {
+  const { id } = req.params;
+  const { action } = req.body; // 'approve' ou 'reject'
+  console.log(action)
+  try {
+    const request = await TeacherRequestModel.findById(id);
+    if (!request) {
+      return res.status(404).json({ message: 'Demande non trouvée' });
+    }
+
+
+    if (action === 'approve') {
+      request.status = 'approved';
+      await UserModel.findByIdAndUpdate(request.userId, { role: 'teacher' });
+    } else if (action === 'reject') {
+      request.status = 'rejected';
+    }
+
+    await request.save();
+    res.status(200).json({ message: 'Action effectuée avec succès' });
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur lors du traitement de la demande' });
+  }
+});
+
+
+
+
+
+
+// userRouter.get("/Teachme/:userId", async (req, res) => {
+//   try {
+//     const userId = req.params.userId;
+
+//     // Find the user by ID
+//     const user = await UserModel.findById(userId);
+
+//     // Check if the user exists
+//     if (!user) {
+//       return res.status(404).json({ message: "User not found" });
+//     }
+
+//     // Update the user's role to "teacher"
+//     user.role = "teacher";
+//     await user.save();
+
+//     // Return success message
+//     res.status(200).json({ message: "User role updated to teacher" });
+//   } catch (err) {
+//     // Handle errors
+//     res.status(400).json({ message: "Something went wrong", error: err.message });
+//   }
+// });
 
 
 

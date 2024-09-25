@@ -18,6 +18,7 @@ import { showToast } from "../SignUp";
 import logo from "../../asset/16Inspiration.png";
 
 
+
 const Navbar = () => {
   const isMobile = useBreakpointValue({ base: true, lg: false });
   const navigate = useNavigate();

@@ -87,12 +87,12 @@ const Dropdown = () => {
               </Box>
             </Flex>
           </MenuButton>
-          <MenuList p={5} w='25vw' overflow={userStore?.role==='admin' ? 'scroll' : ''} h={userStore?.role==='admin' ? '90vh' : ''} pb='4'>
+          <MenuList p={5} w='25vw' overflow={userStore?.role === 'admin' ? 'scroll' : ''} h={userStore?.role === 'admin' ? '90vh' : ''} pb='4'>
             {/* user options  */}
             <Box >
               <Flex justify="space-between" alignItems="center">
                 <Box p="1.5rem 0">
-                  {userStore?.role === "admin" || userStore?.role==='teacher' ? (
+                  {userStore?.role === "admin" || userStore?.role === 'teacher' ? (
                     <Flex alignItems={"center"} >
                       <Box>
                         <FaUserShield size="2rem" color="#0056d2" />
@@ -231,6 +231,15 @@ const Dropdown = () => {
                     GiftCards
                   </MenuItem>
                 </Link>
+                <Link to="/admin/requests">
+                  <MenuItem
+                    p="0.7rem 0"
+                    fontWeight="500"
+                    borderTop="1px solid #D7DBDD"
+                  >
+                    Teach Requests
+                  </MenuItem>
+                </Link>
                 <Link to="/admin/statistic">
                   <MenuItem
                     p="0.7rem 0"
@@ -254,7 +263,7 @@ const Dropdown = () => {
 
             {/* Teacher options */}
 
-            {userStore?.role==='teacher' && (
+            {userStore?.role === 'teacher' && (
               <Box >
                 <Link to="/profile">
                   <MenuItem

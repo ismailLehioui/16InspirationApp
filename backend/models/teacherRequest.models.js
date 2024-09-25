@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const TeacherRequestSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', required: true
+        ref: 'user', // Assurez-vous que 'user' est correct ici
+        required: true
     },
     status: {
         type: String,
@@ -16,7 +17,6 @@ const TeacherRequestSchema = new mongoose.Schema({
     }
 });
 
-const TeacherRequest = mongoose.model('TeacherRequest', TeacherRequestSchema);
-
-
-module.exports = TeacherRequest;
+// Export du modèle TeacherRequest
+const TeacherRequestModel = mongoose.model('TeacherRequest', TeacherRequestSchema);
+module.exports = {TeacherRequestModel};

@@ -17,7 +17,7 @@ const token = JSON.parse(localStorage.getItem("user"))?.token || "";
 export const changeRole = (data, userId) => (dispatch) => {
   dispatch({ type: PRODUCT_REQUEST });
   request
-    .get(`users/Teachme/${userId}`, {
+    .get(`users/teach/request`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,

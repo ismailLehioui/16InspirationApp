@@ -49,7 +49,7 @@ const SingleAbsolute = ({ props }) => {
       <div className="px-[24px]">
         <div>
           <h3 className="font-serif font-bold max-w-[250px] py-1 ">
-            Subscribe to SRM's top courses
+            Subscribe to 16Isnspiration's top courses
           </h3>
           <p className="text-[10px]">
             Get this course, plus 8,000+ of our top-rated courses with Personal
