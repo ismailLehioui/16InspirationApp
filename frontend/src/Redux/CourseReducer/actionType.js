@@ -1,0 +1,5 @@
+// redux/CourseReducer/actionType.js
+
+export const GET_COURSE_COUNT_LOADING = "GET_COURSE_COUNT_LOADING";
+export const GET_COURSE_COUNT_SUCCESS = "GET_COURSE_COUNT_SUCCESS";
+export const GET_COURSE_COUNT_ERROR = "GET_COURSE_COUNT_ERROR";

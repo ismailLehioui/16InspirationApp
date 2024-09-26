@@ -36,6 +36,20 @@ courseRoute.get("/all", async (req, res) => {
   }
 });
 
+courseRoute.get("/count", async (req, res) => {
+  try {
+    // Utilisez countDocuments() pour compter le nombre de cours
+    const courseCount = await courseModel.countDocuments();
+
+    // Retourner la réponse avec le nombre de cours
+    res.status(200).json({ count: courseCount });
+  } catch (err) {
+    res
+      .status(400)
+      .json({ message: "Something went wrong", error: err.message });
+  }
+});
+
 
 
 
@@ -137,7 +151,7 @@ courseRoute.post("/add", async (req, res) => {
         res.status(403).json({ message: "Course Already Present" });
       } else {
         let data = req.body
-        const newCourse = new courseModel({...data,teacher:req.body.username,teacherId:req.body.userId});
+        const newCourse = new courseModel({ ...data, teacher: req.body.username, teacherId: req.body.userId });
         await newCourse.save();
         res.status(201).json({ message: "Course Added", data: newCourse });
       }
@@ -188,7 +202,7 @@ courseRoute.delete("/delete/:courseID", async (req, res) => {
     if (req.body.role == "admin" || req.body.role == "teacher") {
       const courseID = req.params.courseID;
       const course = await courseModel.findByIdAndDelete({ _id: courseID });
-     // console.log(course);
+      // console.log(course);
       if (!course) {
         res.status(404).json({ message: "course not found" });
       } else {

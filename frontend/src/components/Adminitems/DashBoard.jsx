@@ -1,14 +1,27 @@
-import { Box, Flex, Grid, Icon, Text } from "@chakra-ui/react";
-import React from "react";
+import { Box, Flex, Grid, Icon, Text, Button } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import { Bar, Pie } from "react-chartjs-2";
 import Chart from "chart.js/auto";
+import axios from "axios"; // Pour les appels API
 import AdminNavTop from "../AdminNavTop";
 import { BiMale } from "react-icons/bi";
 import { FaVideo } from "react-icons/fa";
 import { FiBook } from "react-icons/fi";
 import { FiFilm } from "react-icons/fi";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCourseCount } from "../../Redux/CourseReducer/action";
+
 
 const DashBoard = () => {
+  const { count, loading, error } = useSelector((state) => state.course);
+  // const [error, setError] = useState("");
+  const dispatch = useDispatch();
+
+  // Requête pour obtenir le nombre total de cours
+  useEffect(() => {
+    dispatch(fetchCourseCount()); // Appel pour récupérer le nombre de cours
+  }, [dispatch]);
+
   const data = {
     labels: ["January", "February", "March", "April", "May", "June"],
     datasets: [
@@ -21,6 +34,7 @@ const DashBoard = () => {
       },
     ],
   };
+  
   const datapie = {
     labels: ["Full Stack", "Frontend", "Backend"],
     datasets: [
@@ -31,6 +45,7 @@ const DashBoard = () => {
       },
     ],
   };
+  
   const datapie1 = {
     labels: ["live", "recorded", "offline"],
     datasets: [
@@ -48,9 +63,8 @@ const DashBoard = () => {
         <Box>
           {/* <AdminSidebar /> */}
         </Box>
-        <Box mt='80px'>
+        <Box mt="80px">
           <AdminNavTop />
-          {/*  */}
           <Box h={"130vh"} p={5}>
             <Grid
               templateColumns={{
@@ -89,7 +103,7 @@ const DashBoard = () => {
                   <Text fontWeight={"bold"}>Total Courses</Text>
                   <FiBook size={24} />
                 </Flex>
-                <Text mt={15}>Count 1200</Text>
+                <Text mt={15}>{count}</Text> {/* Affichage du nombre de cours */}
                 <Flex mt={15} justify={"space-between"}>
                   <Text>+5%</Text>
                   <Text>Since last month</Text>
@@ -107,16 +121,10 @@ const DashBoard = () => {
                 </Flex>
               </Box>
             </Grid>
+
             {/* bar graph */}
-            <Flex
-              align={{ xl: "center", lg: "center", base: "left" }}
-              minHeight="60vh"
-            >
-              <Box
-                p={{ xl: 4, lg: 4, base: 0 }}
-                boxShadow="md"
-                w={{ xl: "100%", lg: "100vh", base: "50vh" }}
-              >
+            <Flex align={{ xl: "center", lg: "center", base: "left" }} minHeight="60vh">
+              <Box p={{ xl: 4, lg: 4, base: 0 }} boxShadow="md" w={{ xl: "100%", lg: "100vh", base: "50vh" }}>
                 <Text fontSize="xl" fontWeight="bold" mb={4}>
                   Monthly Sales
                 </Text>
@@ -128,23 +136,14 @@ const DashBoard = () => {
             {/* Bar graph Ends */}
 
             {/* Pie graph */}
-            <Grid
-              templateColumns={{
-                xl: "repeat(2,1fr)",
-                lg: "repeat(2,1fr)",
-                base: "repeat(1,1fr)",
-              }}
-            >
+            <Grid templateColumns={{ xl: "repeat(2,1fr)", lg: "repeat(2,1fr)", base: "repeat(1,1fr)" }}>
               <Flex align="center" justify="center" maxHeight="60vh">
                 <Box p={4} boxShadow="md">
                   <Text fontSize="xl" fontWeight="bold" mb={4}>
                     Courses
                   </Text>
                   <Box height="300px">
-                    <Pie
-                      data={datapie}
-                      options={{ maintainAspectRatio: false }}
-                    />
+                    <Pie data={datapie} options={{ maintainAspectRatio: false }} />
                   </Box>
                 </Box>
               </Flex>
@@ -155,10 +154,7 @@ const DashBoard = () => {
                     Videos Category
                   </Text>
                   <Box height="300px">
-                    <Pie
-                      data={datapie1}
-                      options={{ maintainAspectRatio: false }}
-                    />
+                    <Pie data={datapie1} options={{ maintainAspectRatio: false }} />
                   </Box>
                 </Box>
               </Flex>

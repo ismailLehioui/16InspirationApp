@@ -50,6 +50,7 @@ export const addProduct = (data) => (dispatch) => {
     .post("courses/add", data, {
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     })
     .then((res) => {
