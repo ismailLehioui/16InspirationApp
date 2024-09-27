@@ -17,10 +17,10 @@ const Footer = () => {
     >
       <Grid
         templateColumns={{
-          base: "repeat(1, 1fr)", 
+          base: "repeat(1, 1fr)",
           sm: "repeat(2, 1fr)",
-          md: "repeat(3, 1fr)", 
-          lg: "repeat(4, 1fr)", 
+          md: "repeat(3, 1fr)",
+          lg: "repeat(4, 1fr)",
         }}
         gap={4}
       >
@@ -118,10 +118,11 @@ const Footer = () => {
         }}
       >
         <Box>
-          <Text fontSize="13.5px">© 2023 16Inspiration. All rights reserved.</Text>
+          {/* <Text fontSize="13.5px">© 2023 16Inspiration. All rights reserved.</Text> */}
+          <Text fontSize="13.5px">© Realisé par Ismail LEHIOUI</Text>
         </Box>
         <Flex spacing={4} overflow='hidden'>
-        <a href="https://www.facebook.com/16inspiration/" target="_blank" rel="noopener noreferrer">
+          <a href="https://www.facebook.com/16inspiration/" target="_blank" rel="noopener noreferrer">
             <Image
               src="https://d3njjcbhbojbot.cloudfront.net/api/utilities/v1/imageproxy/https://s3.amazonaws.com/coursera_assets/footer/facebook.png?auto=format%2Ccompress&dpr=1&w=28&h=28&q=40"
               alt="Facebook Logo"

@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import Navbar from "../Pages/Navbar";
+import logoGoogle from "../asset/google.png";
+
 import {
   Box,
   Button,
@@ -8,11 +10,10 @@ import {
   Input,
   Spinner,
   Text,
-  keyframes,
   useToast,
 } from "@chakra-ui/react";
 
-import { useDispatch, useSelector, useStore } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginFetch } from "../Redux/UserReducer/action";
 import { Link, useNavigate } from "react-router-dom";
 import { showToast } from "./SignUp";
@@ -29,7 +30,12 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const toast = useToast();
-  // will show the input element when click on element
+
+  // Google Auth function
+  const googleAuth = () => {
+    window.open(`${process.env.REACT_APP_API_URL}/auth/google/callback`, "_self");
+  };
+
   function showInput(e) {
     const ele = e.target.id;
     if (ele === "email") {
@@ -43,7 +49,6 @@ const Login = () => {
     }
   }
 
-  // will block the input element when click on backgrond
   function blockInput(event) {
     if (event.target === backgroundRef.current && !form.email) {
       emailInput.current.style.display = "none";
@@ -55,51 +60,37 @@ const Login = () => {
     }
   }
 
-  // form management
-
   function handleInput(e) {
     const { value, name } = e.target;
-    if (name === "email") {
-      setForm({ ...form, email: value });
-    } else {
-      setForm({ ...form, password: value });
-    }
+    setForm({ ...form, [name]: value });
   }
 
-
-
-  // login function
   function handleLogin() {
     dispatch(loginFetch(form)).then((res) => {
-   const user = JSON.parse(localStorage.getItem('user'))
-      if(user?.message){
-        showToast({toast,message:'Login Successful',color:'green'})
+      const user = JSON.parse(localStorage.getItem("user"));
+      if (user?.message) {
+        showToast({ toast, message: "Login Successful", color: "green" });
         setForm({ email: "", password: "" });
-      }else{
-        showToast({toast,message:userStore?.isError,color:'red'})
+      } else {
+        showToast({ toast, message: userStore?.isError, color: "red" });
       }
-      
     });
   }
 
-
-  useEffect(()=>{
-    // if isAuth is true move to dashboard;
-
-  if (userStore.isAuth) {
-    if(userStore?.role==='user'){
-      navigate("/home");
-    }else if(userStore?.role === "admin"){
-      navigate("/admin/dashboard");
+  useEffect(() => {
+    if (userStore.isAuth) {
+      if (userStore?.role === "user") {
+        navigate("/home");
+      } else if (userStore?.role === "admin") {
+        navigate("/admin/dashboard");
+      } else if (userStore?.role === "teacher") {
+        navigate("/TeacherDashboard");
+      }
     }
-    else if(userStore?.role==='teacher'){
-      navigate("/TeacherDashboard");
-    }
-  }
-  },[userStore?.isAuth,userStore?.role])
+  }, [userStore?.isAuth, userStore?.role, navigate]);
 
   return (
-    <Box pb='2rem'>
+    <Box pb="2rem">
       <Box>
         <Navbar />
       </Box>
@@ -111,10 +102,10 @@ const Login = () => {
         ref={backgroundRef}
       >
         <Box w={{ base: "90%", sm: "80%", md: "40%", lg: "30%" }}>
-          <Box mt='15px'>
-            <Heading size="md">Log in to your elearning Account</Heading>
+          <Box mt="15px">
+            <Heading size="md">Log in to your BionicSoul Account</Heading>
           </Box>
-          {/* 2nd box  */}
+          {/* Form fields */}
           <Box mt="35px">
             <Box
               border="1px solid"
@@ -143,7 +134,6 @@ const Login = () => {
                 />
               </Box>
             </Box>
-            {/* password */}
             <Box
               border="1px solid"
               p="20px"
@@ -172,11 +162,16 @@ const Login = () => {
                 />
               </Box>
             </Box>
-            <Box display='flex' m='1rem 0' fontSize='0.7rem'>
-              <Text >You don't have Account with us?</Text>
-              <Link to='/signup'><Text _hover={{}} fontWeight='500' ml='0.5rem' color='black'>SignUp</Text></Link>
+            {/* Link to Signup */}
+            <Box display="flex" m="1rem 0" fontSize="0.7rem">
+              <Text>You don't have an account?</Text>
+              <Link to="/signup">
+                <Text _hover={{}} fontWeight="500" ml="0.5rem" color="black">
+                  SignUp
+                </Text>
+              </Link>
             </Box>
-            {/* button  */}
+            {/* Login button */}
             <Box mt="15px">
               <Button
                 w="100%"
@@ -190,6 +185,27 @@ const Login = () => {
                 <Heading size="xs">
                   {userStore.loading ? <Spinner color="white" /> : "Log in"}
                 </Heading>
+              </Button>
+            </Box>
+            {/* Google Sign In button */}
+            <Box mt="15px">
+              <Button
+                w="100%"
+                color="black"
+                bg="white"
+                border="1px solid"
+                borderRadius="0"
+                textAlign="center"
+                onClick={googleAuth}
+              >
+                <Flex alignItems="center">
+                  <img
+                    src={logoGoogle}
+                    alt="google icon"
+                    style={{ marginRight: "10px", width: "20px", height: "20px" }} // Taille ajustée ici
+                  />
+                  <Text>Sign in with Google</Text>
+                </Flex>
               </Button>
             </Box>
           </Box>
