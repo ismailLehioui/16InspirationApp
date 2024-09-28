@@ -1,10 +1,10 @@
 const express = require('express');
-const router = express.Router(); // Initialiser le routeu
+const authRouter = express.Router(); // Initialiser le routeu
 const passport = require('passport');
 
 
 
-router.get("/login/success", (req, res) => {
+authRouter.get("/login/success", (req, res) => {
     if(req.user){
         res.status(200).json({
             error: false,
@@ -16,7 +16,7 @@ router.get("/login/success", (req, res) => {
     }
 })
 
-router.get("/login/failed", (req, res ) => {
+authRouter.get("/login/failed", (req, res ) => {
     res.status(401).json({
         error: true,
         message: "Login in failure"
@@ -24,7 +24,7 @@ router.get("/login/failed", (req, res ) => {
 }
 )
 
-router.get(
+authRouter.get(
     "/google/callback",
     passport.authenticate("google",{
         successRedirect: process.env.CLIENT_URL,
@@ -32,12 +32,20 @@ router.get(
     })
 )
 
-router.get("/google", passport.authenticate("google",["profile","email"]));
+authRouter.get("/google", passport.authenticate("google",["profile","email"]));
 
-router.get("/logout", (req, res) => {
-    req.logout(),
-    res.redirect(process.env.CLIENT_URL);
-})
+// authRouter.get("/logout", (req, res) => {
+//     req.logout(),
+//     res.redirect(process.env.CLIENT_URL);
+// })
+authRouter.get("/logout", (req, res) => {
+    req.logout((err) => {
+        if (err) { return next(err); }
+        res.redirect(process.env.CLIENT_URL);
+    });
+});
 
 
-module.exports = router;
+module.exports = {
+    authRouter
+};

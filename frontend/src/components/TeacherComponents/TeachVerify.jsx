@@ -10,7 +10,7 @@ const TeachVerify = () => {
   const [hasPendingRequest, setHasPendingRequest] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(""); // État pour le message de succès
+  const [successMessage, setSuccessMessage] = useState(""); // State for success message
 
   useEffect(() => {
     const checkExistingRequest = async () => {
@@ -21,12 +21,12 @@ const TeachVerify = () => {
           },
         });
 
-        // Vérifier si une demande en attente existe
+        // Check if a pending request exists
         if (response.data.some(request => request.status === 'pending')) {
           setHasPendingRequest(true);
         }
       } catch (err) {
-        // setError('Erreur lors de la vérification des demandes');
+        // setError('Error checking requests');
       } finally {
         setLoading(false);
       }
@@ -37,12 +37,12 @@ const TeachVerify = () => {
 
   const handleTeacherRequest = async () => {
     if (hasPendingRequest) {
-      setSuccessMessage("Votre demande a déjà été envoyée."); // Afficher le message si la demande existe déjà
+      setSuccessMessage("Your request has already been sent."); // Display message if request exists
       return;
     }
 
     try {
-      // Envoyer la demande au serveur
+      // Send the request to the server
       await request.post('/users/teach/request', 
         { userId: user.userId }, 
         {
@@ -52,18 +52,18 @@ const TeachVerify = () => {
         }
       );
 
-      // Afficher le message de succès
-      setSuccessMessage("Votre demande a été envoyée avec succès.");
+      // Display success message
+      setSuccessMessage("Your request has been sent successfully.");
       
-      // Rediriger vers le tableau de bord enseignant en cas de succès
+      // Redirect to the teacher dashboard on success
       navigate("/home");
     } catch (error) {
-      console.error('Erreur lors de l\'envoi de la demande', error);
+      console.error('Error sending the request', error);
     }
   };
 
   if (loading) {
-    return <Text>Chargement...</Text>;
+    return <Text>Loading...</Text>;
   }
 
   return (
@@ -76,40 +76,40 @@ const TeachVerify = () => {
           </Alert>
         )}
         {successMessage && (
-          <Alert status="info" mb={4}>  {/* Utiliser status="info" pour le message d'information */}
+          <Alert status="info" mb={4}>  {/* Use status="info" for information message */}
             <AlertIcon />
             {successMessage}
           </Alert>
         )}
         {hasPendingRequest ? (
           <Text color="red.500" mb={4}>
-            Vous avez déjà une demande en attente. Veuillez patienter.
+            You already have a pending request. Please wait.
           </Text>
         ) : (
           <>
             <Box textAlign="center" mb={4}>
               <Heading as="h1" mb={2}>
-                Termes et Conditions
+                Terms and Conditions
               </Heading>
               <Text fontSize="lg">
-                Veuillez lire attentivement les termes et conditions suivants avant de continuer.
+                Please read the following terms and conditions carefully before proceeding.
               </Text>
             </Box>
             <UnorderedList pl={4} mb={4}>
               <ListItem>
-                Vous devez avoir au moins 18 ans pour vous inscrire en tant qu'enseignant sur notre plateforme.
+                You must be at least 18 years old to register as a teacher on our platform.
               </ListItem>
               <ListItem>
-                Vous devez posséder les qualifications, l'expertise et l'autorité nécessaires pour enseigner les cours que vous ajoutez à la plateforme.
+                You must possess the necessary qualifications, expertise, and authority to teach the courses you add to the platform.
               </ListItem>
               <ListItem>
-                Vous êtes tenu de fournir des informations exactes et complètes lors du processus d'inscription.
+                You are required to provide accurate and complete information during the registration process.
               </ListItem>
             </UnorderedList>
             <FormControl>
               <FormLabel>
                 <Checkbox colorScheme="blue" defaultChecked />
-                Oui, j'ai lu tous les termes et conditions. J'accepte l'accord.
+                Yes, I have read all the terms and conditions. I accept the agreement.
               </FormLabel>
             </FormControl>
             <Box textAlign="center" mt={4}>
@@ -118,9 +118,9 @@ const TeachVerify = () => {
                 color="white"
                 borderRadius="5px"
                 _hover={{ bg: "#003e9c" }}
-                onClick={handleTeacherRequest}
+                onClick={handleTeacherRequest} // Change the button text
               >
-                Soumettre
+                Send Teaching Request
               </Button>
             </Box>
           </>
