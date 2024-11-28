@@ -31,6 +31,7 @@ const Login = () => {
   const navigate = useNavigate();
   const toast = useToast();
 
+  
   // Google Auth function
   const googleAuth = () => {
     window.open(`${process.env.REACT_APP_API_URL}/auth/google/callback`, "_self");
@@ -78,6 +79,35 @@ const Login = () => {
   }
 
   useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        // Faites une requête pour obtenir les informations de l'utilisateur après Google Auth
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/auth/login/success`, {
+          method: "GET",
+          credentials: "include",  // Inclure les cookies de session
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+          console.error("Authentication error:", data.message);
+          navigate("/login");
+        } else {
+          // Simulez le remplissage du formulaire (par exemple, avec les données Google)
+          const form = {
+            email: data.user.email,
+            googleId: data.user.googleId,  // Ajoutez d'autres informations si nécessaire
+          };
+
+          // Appelez la fonction handleLogin avec les données de l'utilisateur
+          handleLogin(form);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
+    };
+
+    fetchUserData();
     if (userStore.isAuth) {
       if (userStore?.role === "user") {
         navigate("/home");
@@ -103,7 +133,7 @@ const Login = () => {
       >
         <Box w={{ base: "90%", sm: "80%", md: "40%", lg: "30%" }}>
           <Box mt="15px">
-            <Heading size="md">Log in to your BionicSoul Account</Heading>
+            <Heading size="md">Log in to your 16Inspiration Account</Heading>
           </Box>
           {/* Form fields */}
           <Box mt="35px">

@@ -130,6 +130,7 @@ const SignUp = () => {
   // SignUp function
   async function handleSignUp() {
     const { email, password, confirmPassword, name } = form;
+    // console.log(email, password, confirmPassword, name)
     if (!email || !password || !confirmPassword || !name) {
       dispatch(actionsingUpError("All fields are required"));
       return;
@@ -147,15 +148,15 @@ const SignUp = () => {
       return;
     }
 
-     dispatch(signUpFetch(form)).then((res) => {
-    if(!userStore?.isError){
-      setForm({ email: "", password: "", confirmPassword: "", name: "" });
-      showToast({toast,message:'SignUp Successful',color:'green'});
-      navigate('/login')
-    }else{
-      showToast({toast,message:userStore?.isError,color:'red'});
-    }
-      
+    dispatch(signUpFetch(form)).then((res) => {
+      if (!userStore?.isError) {
+        setForm({ email: "", password: "", confirmPassword: "", name: "" });
+        showToast({ toast, message: 'SignUp Successful', color: 'green' });
+        navigate('/login')
+      } else {
+        showToast({ toast, message: userStore?.isError, color: 'red' });
+      }
+
     });
   }
 

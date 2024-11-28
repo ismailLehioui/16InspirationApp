@@ -127,7 +127,7 @@ courseRoute.get("/TeacherCourses", async (req, res) => {
 courseRoute.get("/:courseID", async (req, res) => {
   try {
     const courseID = req.params.courseID;
-    console.log(courseID)
+    // console.log(courseID)
     const course = await courseModel.findOne({ _id: courseID });
     res.status(200).json({ course });
   } catch (err) {

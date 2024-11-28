@@ -50,7 +50,22 @@ export function writeLocalStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }
 
-
+// Add a new action for Google login success
+export const googleLoginFetch = (token) => (dispatch) => {
+  return request
+    .get(`/auth/login/success`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => {
+      dispatch(actionLoginSuccess(res.data.user)); // Use the user from response
+    })
+    .catch((err) => {
+      dispatch(actionLoginError(err.message));
+      console.log(err);
+    });
+};
 
 
 

@@ -1,6 +1,7 @@
 const express = require('express');
 const authRouter = express.Router(); // Initialiser le routeu
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 
 
 
@@ -24,13 +25,32 @@ authRouter.get("/login/failed", (req, res ) => {
 }
 )
 
+// authRouter.get(
+//     "/google/callback",
+//     passport.authenticate("google",{
+//         successRedirect: process.env.CLIENT_URL,
+//         failureRedirect: "/login/failed"
+//     })
+// )
 authRouter.get(
     "/google/callback",
-    passport.authenticate("google",{
-        successRedirect: process.env.CLIENT_URL,
-        failureRedirect: "/login/failed"
-    })
-)
+    passport.authenticate("google", { failureRedirect: "/login/failed" }),
+    (req, res) => {
+      // Générez un token JWT et renvoyez-le
+      const token = jwt.sign(
+        { 
+            userId: req.user._id, 
+            email: req.user.email, 
+            role: req.user.role },
+            "arivu",
+        { expiresIn: "7d" }
+      );
+  
+      // Redirection vers le frontend avec le token
+      res.redirect(`${process.env.CLIENT_URL}/login/success?token=${token}`);
+    }
+  );
+  
 
 authRouter.get("/google", passport.authenticate("google",["profile","email"]));
 

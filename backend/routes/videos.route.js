@@ -35,7 +35,7 @@ const videoRoute = express.Router();
 
 videoRoute.get('/', async (req, res) => {
     const { page, limit, user } = req.query;
-    console.log(user);
+    // console.log(user);
     try {
         if (req.body.role === 'admin') {
             const videos = await VideoModel.find({});
