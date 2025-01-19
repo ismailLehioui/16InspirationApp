@@ -1,7 +1,5 @@
 module.exports = {
-    testEnvironment: 'jsdom',
-    transform: {
-        '^.+\\.(js|jsx)$': 'babel-jest',
-    },
-    setupFilesAfterEnv: ['<rootDir>/setupTests.js'],
+    transformIgnorePatterns: [
+        "/node_modules/(?!axios)/"  // Transforme axios et d'autres modules qui utilisent ES Modules
+    ],
 };
