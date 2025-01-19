@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "build": "running 'Build Script'",
+    "build": "echo 'No build step for backend'",
     "server": "nodemon index.js"
   },
   "keywords": [],
