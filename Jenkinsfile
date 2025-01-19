@@ -25,7 +25,7 @@ pipeline {
                 script {
                     // Installation des dépendances pour le backend (Node.js)
                     dir("${BACKEND_DIR}") {
-                        sh 'npm install'
+                        bat 'npm install'
                     }
                 }
             }
@@ -36,7 +36,7 @@ pipeline {
                 script {
                     // Installation des dépendances pour le frontend (React)
                     dir("${FRONTEND_DIR}") {
-                        sh 'npm install'
+                        bat 'npm install'
                     }
                 }
             }
@@ -47,7 +47,7 @@ pipeline {
                 script {
                     // Exécuter les tests backend si nécessaires
                     dir("${BACKEND_DIR}") {
-                        sh 'npm run test' // Remplacez cette ligne par vos tests si vous en avez
+                        bat 'npm run test' // Remplacez cette ligne par vos tests si vous en avez
                     }
                 }
             }
@@ -58,7 +58,7 @@ pipeline {
                 script {
                     // Exécuter les tests frontend si nécessaires
                     dir("${FRONTEND_DIR}") {
-                        sh 'npm run test' // Remplacez cette ligne par vos tests si vous en avez
+                        bat 'npm run test' // Remplacez cette ligne par vos tests si vous en avez
                     }
                 }
             }
@@ -67,7 +67,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv(installationName: 'SonarQubeScanner', credentialsId: '16Inspiration-token', envOnly: 'SONAR_TOKEN') {
-                    sh """
+                    bat """
                         ${SONAR_SCANNER_HOME}/bin/sonar-scanner \
                         -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
                         -Dsonar.sources=. \
@@ -83,7 +83,7 @@ pipeline {
                 script {
                     // Construire le backend (si nécessaire pour l'environnement de production)
                     dir("${BACKEND_DIR}") {
-                        sh 'npm run build' // Si votre backend a une commande build
+                        bat 'npm run build' // Si votre backend a une commande build
                     }
                 }
             }
@@ -94,7 +94,7 @@ pipeline {
                 script {
                     // Construire le frontend (création des fichiers de production React)
                     dir("${FRONTEND_DIR}") {
-                        sh 'npm run build'
+                        bat 'npm run build'
                     }
                 }
             }
@@ -105,7 +105,7 @@ pipeline {
                 script {
                     // Construire l'image Docker pour le backend
                     dir("${BACKEND_DIR}") {
-                        sh 'docker build -t my-backend .'
+                        bat 'docker build -t my-backend .'
                     }
                 }
             }
@@ -116,7 +116,7 @@ pipeline {
                 script {
                     // Construire l'image Docker pour le frontend
                     dir("${FRONTEND_DIR}") {
-                        sh 'docker build -t my-frontend .'
+                        bat 'docker build -t my-frontend .'
                     }
                 }
             }
@@ -126,8 +126,8 @@ pipeline {
             steps {
                 script {
                     // Push des images Docker vers un registry (par exemple Docker Hub ou un registre privé)
-                    sh 'docker push my-backend'
-                    sh 'docker push my-frontend'
+                    bat 'docker push my-backend'
+                    bat 'docker push my-frontend'
                 }
             }
         }
