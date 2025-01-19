@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -9,9 +8,8 @@ pipeline {
         BUILD_DIR = 'build'       // Dossier de build
         MONGO_URI = 'mongodb://127.0.0.1:27017/elearningplatform'
         PORT = '5000'
-        SONAR_PROJECT_KEY='16Inspiration'
-        SONAR_SCANNER_HOME= tool 'SonarQube'
-
+        SONAR_PROJECT_KEY = '16Inspiration'
+        SONAR_SCANNER_HOME = tool 'SonarQube' // Outil SonarQube configuré dans Jenkins
     }
 
     stages {
@@ -65,10 +63,11 @@ pipeline {
                 }
             }
         }
-        stage( 'SonarQube Analisis' ){
-            steps{
-                withSonarQubeEnv([credentialsId: '16Inspiration-token', envOnly: 'SONAR_TOKEN']) {
-                    sh"""
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv(installationName: 'SonarQube', credentialsId: '16Inspiration-token', envOnly: 'SONAR_TOKEN') {
+                    sh """
                         ${SONAR_SCANNER_HOME}/bin/sonar-scanner \
                         -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
                         -Dsonar.sources=. \
@@ -132,8 +131,6 @@ pipeline {
                 }
             }
         }
-
-       
     }
 
     post {
