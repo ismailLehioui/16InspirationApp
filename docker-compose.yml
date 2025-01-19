@@ -14,7 +14,14 @@ services:
     environment:
       - PORT=5000
       - MONGO_URI=mongodb://mongo:27017/elearningplatform
-      # - JWT_SECRET=your_jwt_secret # Ajouter votre secret JWT ici
+      - JWT_SECRET=privateKey123456789 # Assurez-vous d'ajouter votre secret JWT ici
+      - CLOUDINARY_CLOUD_NAME=dlcfdroot
+      - CLOUDINARY_API_KEY=668392918393952
+      - CLOUDINARY_API_SECRET=-MQVw46OjtFiDUvUek_iZP7WnmA
+      - CLIENT_ID=1047942205967-hd2s8aequkmdo6mgh0aq9odp6d0lsmab.apps.googleusercontent.com
+      - CLIENT_SECRET=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
+      - CLIENT_URL=http://localhost:3000
+      - NODE_ENV=development
     depends_on:
       - mongo
 
@@ -25,6 +32,8 @@ services:
     container_name: frontend
     ports:
       - "3000:80"
+    environment:
+      - REACT_APP_API_URL=http://backend:5000
     depends_on:
       - backend
 
