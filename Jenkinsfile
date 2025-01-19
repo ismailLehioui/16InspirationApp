@@ -20,6 +20,17 @@ pipeline {
             }
         }
 
+        stage('Install Frontend Dependencies') {
+            steps {
+                script {
+                    // Installation des dépendances pour le frontend (React)
+                    dir("${FRONTEND_DIR}") {
+                        bat 'npm install'
+                    }
+                }
+            }
+        }
+
         stage('Install Backend Dependencies') {
             steps {
                 script {
@@ -31,16 +42,7 @@ pipeline {
             }
         }
 
-        stage('Install Frontend Dependencies') {
-            steps {
-                script {
-                    // Installation des dépendances pour le frontend (React)
-                    dir("${FRONTEND_DIR}") {
-                        bat 'npm install'
-                    }
-                }
-            }
-        }
+        
 
         stage('Run Backend Tests') {
             steps {
