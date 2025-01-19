@@ -1,7 +1,7 @@
 const request = require("supertest");
 const express = require("express");
 const passport = require("passport");
-const { authRouter } = require("../routes/auth.route");
+const { authRouter } = require("../routes/auth.routes");
 
 const app = express();
 app.use(express.json());

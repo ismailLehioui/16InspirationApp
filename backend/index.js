@@ -4,7 +4,7 @@ const { userRouter } = require("./routes/users.routes");
 const { courseRoute } = require("./routes/courses.route");
 const { videoRoute } = require("./routes/videos.route");
 const { liveSessionRouter } = require("./routes/liveSession.routes"); // Importez votre routeur
-const {authRouter} = require('./routes/auth')
+const {authRouter} = require('./routes/auth.routes')
 
 const cors = require('cors')
 const passportSetup = require('./password')
