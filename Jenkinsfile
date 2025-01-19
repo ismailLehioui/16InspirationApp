@@ -16,7 +16,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 // Récupérer le code source du repository
-                git 'https://github.com/ismailLehioui/16InspirationApp.git'
+                git branch: 'main', url: 'https://github.com/ismailLehioui/16InspirationApp.git'
             }
         }
 
