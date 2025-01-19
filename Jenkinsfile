@@ -132,36 +132,7 @@ pipeline {
             }
         }
 
-        stage('Deploy Backend') {
-            steps {
-                script {
-                    // Déployer le backend (utilisation de Docker Compose ou Kubernetes)
-                    // Exemple avec Docker Compose :
-                    sh 'docker-compose -f docker-compose.backend.yml up -d'
-                }
-            }
-        }
-
-        stage('Deploy Frontend') {
-            steps {
-                script {
-                    // Déployer le frontend (utilisation de Docker Compose ou Kubernetes)
-                    // Exemple avec Docker Compose :
-                    sh 'docker-compose -f docker-compose.frontend.yml up -d'
-                }
-            }
-        }
-
-        stage('Post-deployment Tests') {
-            steps {
-                script {
-                    // Effectuer des tests de validation post-déploiement (tests de smoke, etc.)
-                    // Vous pouvez utiliser curl ou tout autre outil pour tester l'API et la page
-                    sh 'curl http://localhost:5000' // Test simple du backend
-                    sh 'curl http://localhost:3000' // Test simple du frontend
-                }
-            }
-        }
+       
     }
 
     post {
