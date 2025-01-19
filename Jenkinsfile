@@ -10,7 +10,8 @@ pipeline {
         MONGO_URI = 'mongodb://127.0.0.1:27017/elearningplatform'
         PORT = '5000'
         SONAR_PROJECT_KEY='16Inspiration'
-        SONAR_SCANNER_HOME= tool 'SonarQubeScanner'
+        SONAR_SCANNER_HOME= tool 'SonarQube'
+
     }
 
     stages {
