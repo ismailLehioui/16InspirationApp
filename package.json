@@ -4,5 +4,10 @@
     "cookie-session": "^2.1.0",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0"
+  },
+  "devDependencies": {
+    "chai": "^5.1.2",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
   }
 }
