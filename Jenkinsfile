@@ -51,18 +51,11 @@ pipeline {
         }
 
         stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv(installationName: 'SonarQubeScanner', credentialsId: '16Inspiration-token', envOnly: 'SONAR_TOKEN') {
-                    bat """
-                        ${SONAR_SCANNER_HOME}/bin/sonar-scanner \
-                        -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
-                        -Dsonar.sources=. \
-                        -Dsonar.host.url=http://localhost:9000 \
-                        -Dsonar.login=${SONAR_TOKEN}
-                    """
-                }
-            }
-        }
+    def scannerHome = tool 'SonarScanner';
+    withSonarQubeEnv() {
+   bat "${scannerHome}/bin/sonar-scanner"
+    }
+  }
 
         stage('Build') {
             parallel {
