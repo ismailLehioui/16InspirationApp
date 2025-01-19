@@ -1,22 +1,18 @@
-# Dockerfile for Backend
+# Utiliser Node.js 18.18.1 comme base
+FROM node:18.18.1-alpine
 
-# 1. Utiliser l'image Node.js 18 (selon ta version installée)
-FROM node:18-alpine
+# Définir le répertoire de travail
+WORKDIR /usr/src/app
 
-# 2. Définit le répertoire de travail
-WORKDIR /app
-
-# 3. Copie des fichiers package.json et package-lock.json pour installer les dépendances
-COPY package*.json ./
-
-# 4. Installation des dépendances du backend
+# Copier le fichier package.json et installer les dépendances
+COPY package.json package-lock.json ./
 RUN npm install
 
-# 5. Copie du code source
+# Copier le reste des fichiers
 COPY . .
 
-# 6. Expose le port utilisé par le backend
+# Exposer le port sur lequel l'application écoute
 EXPOSE 5000
 
-# 7. Démarrer l'application
-CMD ["node", "index.js"]
+# Démarrer le serveur avec nodemon
+CMD ["npm", "run", "server"]
