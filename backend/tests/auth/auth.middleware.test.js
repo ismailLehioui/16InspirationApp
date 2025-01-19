@@ -1,4 +1,4 @@
-const { auth } = require("../middlewares/users.middleware");
+const { auth } = require("../../middlewares/users.middleware");
 
 describe("Auth Middleware", () => {
   it("should allow access if the token is valid", async () => {

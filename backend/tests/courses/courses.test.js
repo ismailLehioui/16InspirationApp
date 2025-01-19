@@ -2,7 +2,7 @@ const request = require("supertest");
 const express = require("express");
 const mongoose = require("mongoose");
 const { courseRoute } = require("../routes/course.route");
-const { auth } = require("../middlewares/users.middleware");
+const { auth } = require("../../middlewares/users.middleware");
 
 const app = express();
 app.use(express.json());
