@@ -42,22 +42,11 @@ pipeline {
             }
         }
 
-        stage('Run Backend Tests') {
+        stage('Run Tests') {
             steps {
                 script {
                     // Exécuter les tests backend si nécessaires
                     dir("${BACKEND_DIR}") {
-                        bat 'npm run test' // Remplacez cette ligne par vos tests si vous en avez
-                    }
-                }
-            }
-        }
-
-        stage('Run Frontend Tests') {
-            steps {
-                script {
-                    // Exécuter les tests frontend si nécessaires
-                    dir("${FRONTEND_DIR}") {
                         bat 'npm run test' // Remplacez cette ligne par vos tests si vous en avez
                     }
                 }
