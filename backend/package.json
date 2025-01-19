@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ./tests/**/*.test.js",
+    "test": "jest",
     "build": "running 'Build Script'",
     "server": "nodemon index.js"
   },
@@ -28,6 +28,8 @@
     "toast": "^0.5.4"
   },
   "devDependencies": {
-    "mocha": "^11.0.1"
+    "jest": "^29.7.0",
+    "mocha": "^11.0.1",
+    "supertest": "^7.0.0"
   }
 }

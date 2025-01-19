@@ -1,6 +1,6 @@
 const express = require("express");
-const courseModel = require("../models/courses.model");
-const { auth } = require("../middlewares/users.middleware");
+const courseModel = require("../models/courses.model.js");
+const { auth } = require("../middlewares/users.middleware.js");
 const { UserModel } = require("../models/users.models.js");
 
 const courseRoute = express.Router();
