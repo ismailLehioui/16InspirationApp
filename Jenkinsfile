@@ -90,10 +90,11 @@ pipeline {
         stage('Dockerize') {
             steps {
                 script {
-                    bat 'docker-compose images'
+                    bat 'docker-compose up -d'
                 }
             }
         }
+
 
         stage('OWASP Dependency Check') {
             steps {
