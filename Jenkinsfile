@@ -8,6 +8,7 @@ pipeline {
         SONAR_SCANNER_HOME = tool 'SonarQubeScanner'
         MONGO_URI = 'mongodb://127.0.0.1:27017/elearningplatform'
         PORT = '5000'
+        OWASP_REPORT_DIR = 'owasp-report'
     }
 
     stages {
@@ -87,37 +88,42 @@ pipeline {
             }
         }
 
-        stage('Dockerize') {
-            parallel {
-                stage('Dockerize Backend') {
-                    steps {
-                        script {
-                            dir("${BACKEND_DIR}") {
-                                bat 'docker build -t my-backend .'
-                            }
-                        }
+        stage('OWASP Dependency Check') {
+            steps {
+                script {
+                    dir("${BACKEND_DIR}") {
+                        bat """
+                        dependency-check.bat --project Backend \
+                        --out ${env.WORKSPACE}/${OWASP_REPORT_DIR}/backend \
+                        --scan .
+                        """
                     }
-                }
-                stage('Dockerize Frontend') {
-                    steps {
-                        script {
-                            dir("${FRONTEND_DIR}") {
-                                bat 'docker build -t my-frontend .'
-                            }
-                        }
+                    dir("${FRONTEND_DIR}") {
+                        bat """
+                        dependency-check.bat --project Frontend \
+                        --out ${env.WORKSPACE}/${OWASP_REPORT_DIR}/frontend \
+                        --scan .
+                        """
                     }
                 }
             }
         }
 
-        stage('Push to Docker Registry') {
+        stage('Dockerize') {
             steps {
                 script {
-                    bat 'docker push my-backend'
-                    bat 'docker push my-frontend'
+                    bat 'docker-compose images'
                 }
             }
         }
+
+        // stage('Push to Docker Registry') {
+        //     steps {
+        //         script {
+        //             bat 'docker push '
+        //         }
+        //     }
+        // }
     }
 
     post {
@@ -126,6 +132,9 @@ pipeline {
         }
         failure {
             echo 'Le pipeline a échoué.'
+        }
+        always {
+            archiveArtifacts artifacts: "${OWASP_REPORT_DIR}/**/*", allowEmptyArchive: true
         }
     }
 }
