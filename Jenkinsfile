@@ -87,10 +87,23 @@ pipeline {
                 }
             }
         }
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQubeScanner') { // Nom de l'installation SonarQube configurée
+                    bat """
+                        ${SONAR_SCANNER_HOME}/bin/sonar-scanner ^
+                        -Dsonar.projectKey=${SONAR_PROJECT_KEY} ^
+                        -Dsonar.sources=. ^
+                        -Dsonar.host.url=${SONAR_HOST_URL} ^
+                        -Dsonar.login=${SONAR_LOGIN}
+                    """
+                }
+            }
+        }
         stage('Dockerize') {
             steps {
                 script {
-                    echo 'docker a réussi !'
+                    bat 'docker-compose build'
                 }
             }
         }
