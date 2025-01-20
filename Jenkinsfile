@@ -87,6 +87,13 @@ pipeline {
                 }
             }
         }
+        stage('Dockerize') {
+            steps {
+                script {
+                    bat 'docker-compose images'
+                }
+            }
+        }
 
         stage('OWASP Dependency Check') {
             steps {
@@ -109,13 +116,7 @@ pipeline {
             }
         }
 
-        stage('Dockerize') {
-            steps {
-                script {
-                    bat 'docker-compose images'
-                }
-            }
-        }
+        
 
         // stage('Push to Docker Registry') {
         //     steps {
