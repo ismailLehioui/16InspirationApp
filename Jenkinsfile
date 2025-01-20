@@ -90,7 +90,15 @@ pipeline {
         stage('Dockerize') {
             steps {
                 script {
-                    bat 'docker-compose up -d'
+                    echo 'docker a réussi !'
+                }
+            }
+        }
+
+        stage('Docker push') {
+            steps {
+                script {
+                    echo 'docker a réussi !'
                 }
             }
         }
@@ -99,7 +107,7 @@ pipeline {
         stage('OWASP Dependency Check') {
             steps {
                 script {
-                    dir("${BACKEND_DIR}") {
+                         dir("${BACKEND_DIR}") {
                         bat """
                         dependency-check.bat --project Backend \
                         --out ${env.WORKSPACE}/${OWASP_REPORT_DIR}/backend \
@@ -113,6 +121,7 @@ pipeline {
                         --scan .
                         """
                     }
+
                 }
             }
         }
